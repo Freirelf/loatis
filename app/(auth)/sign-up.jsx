@@ -1,24 +1,43 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from "../../components/CustomButton";
-import { Link } from 'expo-router'
-
+import { Link, router } from 'expo-router'
+import { createUser } from '../../lib/appwrite'
 
 const SignUp = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [form, setForm] = useState({
     username: '',
     email: '',
     password: ''
   })
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const submit = () => {
+  const submit = async () => {
+    if(!form.username || !form.email || !form.password) {
+      Alert.alert('Todos os campos são obrigatórios')
+    }
 
+    setIsSubmitting(true)
+
+    try {
+      const result = await createUser(form.email, form.password, form.username)
+
+      // set it to global state.. ]
+
+      router.replace('/home')
+
+      // return result
+    } catch (error) {
+      Alert.alert('Erro ao cadastrar usuário', error.message)
+    } finally {
+      setIsSubmitting(false)
+    }
+ 
   }
 
   return (
@@ -38,7 +57,7 @@ const SignUp = () => {
         <FormField 
           tile="Username"
           placeholder="Digite seu nome"
-          value={form.email}
+          value={form.username}
           handleChangeText={(value) => setForm({ ...form, username: value })}
           otherStyles="mt-10"
         />

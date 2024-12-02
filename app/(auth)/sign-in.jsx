@@ -52,7 +52,7 @@ const SignIn = () => {
         </Text>
 
         <FormField 
-          tile="Email"
+          title="Email"
           placeholder="Digite seu email"
           value={form.email}
           handleChangeText={(value) => setForm({ ...form, email: value })}
@@ -61,7 +61,7 @@ const SignIn = () => {
         />
 
         <FormField 
-          tile="Password"
+          title="Password"
           placeholder="Digite sua senha"
           value={form.password}
           handleChangeText={(value) => setForm({ ...form, password: value })}

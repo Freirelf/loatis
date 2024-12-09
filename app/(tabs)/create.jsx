@@ -11,6 +11,7 @@ import * as DocumentPicker from 'expo-document-picker'
 import { router } from 'expo-router'
 import { createVideo } from '../../lib/appwrite'
 import { useGlobalContext } from '../../context/GlobalProvider'
+import * as ImagePicker from 'expo-image-picker';
 
 const Create = () => {
   const { user } = useGlobalContext()
@@ -23,9 +24,11 @@ const Create = () => {
   })
 
   const openPicker = async (selectType) => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: selectType === 'image' ? ['image/png', 'image/jpeg', 'image/jpg'] : ['video/mp4', 'video/gif', 'video/mov'],
-    })
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      aspect: [4, 3],
+      quality: 1,
+    });
 
     if(!result.canceled) {
       if(selectType === 'image') {
@@ -143,9 +146,9 @@ const Create = () => {
 
         <FormField 
           title="IA Prompt"
-          value={form.title}
+          value={form.prompt}
           placeholder="O prompt que você usou para criar este vídeo"
-          handleChangeText={(e)=> setForm({...form, prompt: e})}
+          handleChangeText={(e) => setForm({ ...form, prompt: e })}
           otherStyles="mt-7"
         />
 
